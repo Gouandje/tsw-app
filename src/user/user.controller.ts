@@ -1,4 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, MaxFileSizeValidator, BadRequestException, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, MaxFileSizeValidator, BadRequestException, Res, Req } from '@nestjs/common';
+import {Request} from 'express';
+
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -114,11 +116,14 @@ export class UserController {
     )
     file: Express.Multer.File,
     @Param() params,
+    @Req() req: Request
   ) {
     if(!file){
       throw new BadRequestException('le format du fichier choisi n\'est pas acceptable')
     }
-    const avatar = `http://localhost:3000/api/v1/admins/avatar/${file.filename}`;
+    console.log(`${req.protocol}://${req.get('Host')}${req.originalUrl}`);
+
+    const avatar = `https://tsw-app-production.up.railway.app/api/v1/admins/avatar/${file.filename}`;
     console.log( params.adminId);
     return this.userService.uploadAvatar(avatar, params.adminId);
   }
