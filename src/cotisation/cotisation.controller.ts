@@ -12,7 +12,7 @@ export class CotisationController {
     return this.cotisationService.create(createCotisationDto);
   }
 
-  @Get()
+  @Get('allcotisation/:id')
   findAll() {
     return this.cotisationService.findAll();
   }

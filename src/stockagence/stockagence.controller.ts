@@ -8,7 +8,7 @@ import {Schema as MongooseSchema} from 'mongoose';
 export class StockagenceController {
   constructor(private readonly stockagenceService: StockagenceService) {}
 
-  @Post()
+  @Post("addstockagence")
   create(@Body() createStockagenceDto: CreateStockagenceDto) {
     return this.stockagenceService.create(createStockagenceDto);
   }
@@ -18,18 +18,18 @@ export class StockagenceController {
     return this.stockagenceService.findAll(id);
   }
 
-  @Get(':id')
+  @Get('singlestockagence/:id')
   findOne(@Param('id') id: string) {
     return this.stockagenceService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('updatestockagence/:id')
   update(@Param('id') id: string, @Body() updateStockagenceDto: UpdateStockagenceDto) {
     return this.stockagenceService.update(id, updateStockagenceDto);
   }
 
-  @Delete(':id')
+  @Delete('deletestockagence/:id')
   remove(@Param('id') id: string) {
-    return this.stockagenceService.remove(+id);
+    return this.stockagenceService.remove(id);
   }
 }

@@ -30,6 +30,24 @@ export class SalaireManagerService {
     return salairesManager;
   }
 
+  async findAllCotisationManager(managerId: string) {
+    const cotisation: any[] = [];
+    const salairesManager = await this.salaireModel
+                    .find({managerId: managerId})
+                    .populate('managerId')
+                    .populate('salaireId')
+                    .exec();
+    for(let i=0; i<salairesManager.length; i++){
+      const obj={
+        cotisation: salairesManager[i].garantie_manager,
+        mois: salairesManager[i].mois
+      };
+      cotisation.push(obj);
+
+    }                
+    return cotisation;
+  }
+
   async findAllmois(mois: string) {
     const salairesManager = await this.salaireModel
                     .find({mois: mois})

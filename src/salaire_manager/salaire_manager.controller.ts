@@ -19,6 +19,11 @@ export class SalaireManagerController {
     return this.salaireManagerService.findAll(managerId);
   }
 
+  @Get('allCotisationManager/:managerId')
+  findAllcotisatin(@Param('managerId') managerId: string) {
+    return this.salaireManagerService.findAllCotisationManager(managerId);
+  }
+
   @Get('allSalaireManagermois/:mois')
   findAllMois(@Param('mois') mois: string) {
     return this.salaireManagerService.findAllmois(mois);
@@ -34,7 +39,7 @@ export class SalaireManagerController {
     return this.salaireManagerService.update(id, updateDetteDto);
   }
 
-  @Delete(':id')
+  @Delete('deletesalairemanager/:id')
   remove(@Param('id') id: string) {
     return this.salaireManagerService.remove(+id);
   }

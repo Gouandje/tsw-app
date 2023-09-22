@@ -14,6 +14,13 @@ export class Role {
     })
     role: string;
 
+    @ApiProperty({
+        example: 'permisssion',
+        description:'The role of the admin user'
+    })
+    @Prop()
+    permission: string[];
+
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);

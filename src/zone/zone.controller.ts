@@ -27,12 +27,12 @@ export class ZoneController {
     return this.zoneService.findpays(id);
   }
 
-  @Patch(':id')
+  @Patch('updatezone/:id')
   update(@Param('id') id: string, @Body() updateZoneDto: UpdateZoneDto) {
     return this.zoneService.update(id, updateZoneDto);
   }
 
-  @Delete(':id')
+  @Delete('deletezone/:id')
   remove(@Param('id') id: string) {
     return this.zoneService.remove(id);
   }

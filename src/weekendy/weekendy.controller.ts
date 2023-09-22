@@ -14,13 +14,13 @@ export class WeekendyController {
     // console.log(createWeekendyDto);
     createWeekendyDto.bureauId = id;
     createWeekendyDto.createdAt = Date();
-    console.log('test ici',createWeekendyDto);
+    
     return this.weekendyService.create(createWeekendyDto);
   }
 
   @Get('allWeekendy/:bureauId')
   findAll(@Param('bureauId') bureauId: MongooseSchema.Types.ObjectId) {
-    console.log('bureauId',bureauId);
+    
     return this.weekendyService.findAll(bureauId);
   }
 

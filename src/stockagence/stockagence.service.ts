@@ -69,7 +69,7 @@ export class StockagenceService {
     console.log(stockagence);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} stockagence`;
   }
 }

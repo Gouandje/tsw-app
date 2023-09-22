@@ -28,6 +28,7 @@ export class RoleService {
 
   async findAll() {
     const roles = await this.roleModel.find().exec();
+    console.log(roles);
     return roles;
   }
 
