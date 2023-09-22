@@ -34,7 +34,7 @@ export class UserService {
         throw new ConflictException(`un administrateur avec cet email existes déjà`);
       }
       const passwordHash = crypto.createHmac('sha256', createUserDto.mot_de_passe).digest('hex');
-      console.log(createUserDto.roles);
+      // console.log(createUserDto.roles);
       const createdUser = { ...createUserDto, adminId: randomUUID(), mot_de_passe: passwordHash };
       return this.userModel.create(createdUser);
     }
@@ -110,7 +110,7 @@ export class UserService {
     }
 
     const updated = await this.userModel.updateOne({_id: adminId},{avatar: avatar}).lean();
-    console.log(updated);
+    // console.log(updated);
     return user;
   }
 }

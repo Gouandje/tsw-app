@@ -46,7 +46,7 @@ export class UserController {
     // }else{
     //   const avatar = `http://localhost:3000/api/v1/admins/avatar/${file.filename}`;
       // createUserDto.avatar = file.filename;
-      console.log(createUserDto);
+      // console.log(createUserDto);
       return this.userService.create(createUserDto);
 
     // }
