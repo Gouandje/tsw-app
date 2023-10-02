@@ -48,9 +48,8 @@ export class StockagenceService {
   }
 
   async findagenceproduit(agenceId: string, productId: string){
-    console.log({productId: productId, agenceId: agenceId});
 
-    const product = await this.stockagenceModel.findOne({agenceId: agenceId, productId: productId}).exec();
+    const product = await this.stockagenceModel.findOne({agenceId: agenceId, productId: productId}).populate('productId').exec();
     return product;
 
   }

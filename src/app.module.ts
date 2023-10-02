@@ -33,6 +33,8 @@ import { RoleModule } from './role/role.module';
 import { TauxzoneModule } from './tauxzone/tauxzone.module';
 import { SuperviseurzoneModule } from './superviseurzone/superviseurzone.module';
 import { ChefsectionModule } from './chefsection/chefsection.module';
+import { CaisseModule } from './caisse/caisse.module';
+import { EntrepotModule } from './entrepot/entrepot.module';
 
 @Module({
   imports: [
@@ -56,7 +58,7 @@ import { ChefsectionModule } from './chefsection/chefsection.module';
     SalaireModule, 
     AgenceModule, 
     PaysModule, 
-    AuthModule, ExpensesModule, StockModule, AssignmentModule, TauxModule, AffectationModule, CotisationModule, SalaireManagerModule, StockagenceModule, MouvementstockModule, ZoneModule, SectionModule, EmployerModule, CongeModule, StockPaysModule, MvtStockModule, RoleModule, TauxzoneModule, SuperviseurzoneModule, ChefsectionModule
+    AuthModule, ExpensesModule, StockModule, AssignmentModule, TauxModule, AffectationModule, CotisationModule, SalaireManagerModule, StockagenceModule, MouvementstockModule, ZoneModule, SectionModule, EmployerModule, CongeModule, StockPaysModule, MvtStockModule, RoleModule, TauxzoneModule, SuperviseurzoneModule, ChefsectionModule, CaisseModule, EntrepotModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,10 +4,12 @@ import { ExpensesController } from './expenses.controller';
 import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Expense, ExpenseSchema } from './schemas/expense.schema';
+import { CaisseModule } from 'src/caisse/caisse.module';
 
 @Module({
   imports: [    
     HttpModule,
+    CaisseModule,
     MongooseModule.forFeature(
       [
         { 
@@ -18,6 +20,7 @@ import { Expense, ExpenseSchema } from './schemas/expense.schema';
       )
   ],
   controllers: [ExpensesController],
-  providers: [ExpensesService]
+  providers: [ExpensesService],
+  exports: [ExpensesService]
 })
 export class ExpensesModule {}

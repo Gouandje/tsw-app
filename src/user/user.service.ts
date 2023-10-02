@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { DeleteUserResponse } from './dto/delete-response.dto';
 import { randomUUID } from 'crypto';
 import * as crypto from 'crypto';
+import { UserUpdate } from './dto/user-update.dto';
 
 @Injectable()
 export class UserService {
@@ -34,7 +35,6 @@ export class UserService {
         throw new ConflictException(`un administrateur avec cet email existes déjà`);
       }
       const passwordHash = crypto.createHmac('sha256', createUserDto.mot_de_passe).digest('hex');
-      // console.log(createUserDto.roles);
       const createdUser = { ...createUserDto, adminId: randomUUID(), mot_de_passe: passwordHash };
       return this.userModel.create(createdUser);
     }
@@ -80,18 +80,25 @@ export class UserService {
     });
   }
 
-  async  updateById(adminId: string, userUpdates: UpdateUserDto): Promise<User> {
+  async  updateById(adminId: string, userUpdates: UserUpdate): Promise<User> {
+    const user = await this.userModel.findById(adminId).exec();
+    if(userUpdates.mot_de_passe == null){
+      userUpdates.mot_de_passe = user.mot_de_passe;
+    }else{
+      userUpdates.mot_de_passe = crypto.createHmac('sha256', userUpdates.mot_de_passe).digest('hex');
+    }
+
     return this.userModel
-      .findOneAndUpdate({ adminId }, userUpdates, {
+      .findOneAndUpdate({ _id: adminId }, userUpdates, {
         new: true,
       })
       .lean();
   }
 
   async findById(adminId: string): Promise<User> {
-    const user = await this.userModel.findOne({ adminId }).lean();
+    const user = await this.userModel.findById(adminId).populate('countryId');
     if (!user) {
-      throw new NotFoundException(`No existe el usuario ${adminId}`);
+      throw new NotFoundException(`No existe user id ${adminId}`);
     }
     return user;
   }
@@ -110,7 +117,7 @@ export class UserService {
     }
 
     const updated = await this.userModel.updateOne({_id: adminId},{avatar: avatar}).lean();
-    // console.log(updated);
+    console.log(updated);
     return user;
   }
 }

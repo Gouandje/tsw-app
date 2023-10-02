@@ -33,6 +33,11 @@ export class AngenceController {
     return this.agenceService.findOne(id);
   }
 
+  @Get('siegeagence/:name')
+  findSiegeBureau(@Param('name') name: string) {
+    return this.agenceService.findSiegeBureau(name);
+  }
+
   @Patch('updadeagence/:bureauid')
   update(@Param('bureauid') bureauid: MongooseSchema.Types.ObjectId, @Body() updateAgenceDto: UpdateAgenceDto) {
     return this.agenceService.update(bureauid, updateAgenceDto);

@@ -13,6 +13,7 @@ import { join } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Observable, of } from 'rxjs';
+import { UserUpdate } from './dto/user-update.dto';
 
 export const storage = {
   storage: diskStorage({
@@ -63,7 +64,7 @@ export class UserController {
     return this.userService.findAll();
   }  
 
-  @Get(':adminId')
+  @Get('singleuser/:adminId')
   @ApiOperation({
     description: 'Get a user by adminId.',
   })
@@ -85,7 +86,7 @@ export class UserController {
   })
   async update(
     @Param() { adminId }: FindOneParams,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UserUpdate,
   ): Promise<User> {
     return this.userService.updateById(adminId, updateUserDto);
   }

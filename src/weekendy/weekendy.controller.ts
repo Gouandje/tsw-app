@@ -4,6 +4,7 @@ import { CreateWeekendyDto } from './dto/create-weekendy.dto';
 import { UpdateWeekendyDto } from './dto/update-weekendy.dto';
 import { Weekendy } from './schemas/weekendy.schema';
 import { Schema as MongooseSchema } from 'mongoose';
+import { CreateDocteurWeekendyDto } from './dto/create-docteur-weekendy.dto';
 
 @Controller('weekendy')
 export class WeekendyController {
@@ -16,6 +17,20 @@ export class WeekendyController {
     createWeekendyDto.createdAt = Date();
     
     return this.weekendyService.create(createWeekendyDto);
+  }
+
+  @Post('newWeekendytsw')
+  createVenteDocteur(@Body() createWeekendyDto: CreateDocteurWeekendyDto){
+    // console.log(createWeekendyDto);
+    createWeekendyDto.createdAt = Date();
+    
+    return this.weekendyService.createVenteDocteur(createWeekendyDto);
+  }
+
+  @Get('allWeekendydoctor/:bureauId')
+  findAllVenteDocteur(@Param('bureauId') bureauId: MongooseSchema.Types.ObjectId) {
+    
+    return this.weekendyService.findAllVenteDocteur(bureauId);
   }
 
   @Get('allWeekendy/:bureauId')

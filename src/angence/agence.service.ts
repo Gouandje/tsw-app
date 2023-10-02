@@ -68,6 +68,19 @@ export class AgenceService {
     return agence;
   }
 
+  async findSiegeBureau(name: string) {
+    const agence = await this.agenceModel.findOne({bureau_name: name})
+                                         .populate('countryId')
+                                         .populate('zoneId')
+                                         .populate('sectionId')
+                                         .exec();
+
+    if (!agence) {
+      throw new NotFoundException('agence non trouvée');
+    }
+    return agence;
+  }
+
   async findSingleAgengence(bureauId: string){
     const agence = await this.agenceModel.findById(bureauId).exec();
    return agence;

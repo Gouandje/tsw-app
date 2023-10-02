@@ -15,7 +15,6 @@ export class CreateAgenceDto {
          description: 'The name of the country',
      })
      @IsString()
-     @IsNotEmpty()
      zoneId: string;
 
      
@@ -24,7 +23,6 @@ export class CreateAgenceDto {
          description: 'The name of the country',
      })
      @IsString()
-     @IsNotEmpty()
      sectionId: string;
  
 

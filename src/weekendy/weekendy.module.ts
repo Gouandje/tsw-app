@@ -9,6 +9,7 @@ import { Weekendy, WeekendySchema } from './schemas/weekendy.schema';
 import { StockagenceModule } from 'src/stockagence/stockagence.module';
 import { SalaireModule } from 'src/salaire/salaire.module';
 import { AffectationModule } from 'src/affectation/affectation.module';
+import { WeekendyDocteur, WeekendyDocteurSchema } from './schemas/weekendydocteur.schema';
 
 @Module({
   imports: [
@@ -23,6 +24,10 @@ import { AffectationModule } from 'src/affectation/affectation.module';
         { 
           name: Weekendy.name, 
           schema: WeekendySchema 
+        },
+        { 
+          name: WeekendyDocteur.name, 
+          schema: WeekendyDocteurSchema 
         }
       ]
       )

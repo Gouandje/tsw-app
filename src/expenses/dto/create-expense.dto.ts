@@ -8,7 +8,15 @@ export class CreateExpenseDto {
      })
     @IsString()
     @IsNotEmpty()
-    datesortie: string;
+    date: string;
+
+    @ApiProperty({
+        example: '27-05-2023',
+        description: 'The date of the expense',
+     })
+    @IsString()
+    @IsNotEmpty()
+    typetransaction: string;
 
     @ApiProperty({
         example: 'Boris',
@@ -32,6 +40,6 @@ export class CreateExpenseDto {
     })
     @IsNumber()
     @IsNotEmpty()
-    montantsorti: number;
+    montant: number;
 
 }
