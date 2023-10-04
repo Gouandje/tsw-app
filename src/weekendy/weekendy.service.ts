@@ -12,6 +12,8 @@ import { UpdateStockagenceDto } from 'src/stockagence/dto/update-stockagence.dto
 import { AffectationService } from 'src/affectation/affectation.service';
 import { WeekendyDocteur, WeekendyDocteurDocument } from './schemas/weekendydocteur.schema';
 import { CreateDocteurWeekendyDto } from './dto/create-docteur-weekendy.dto';
+import { AgenceService } from 'src/angence/agence.service';
+import { PayscaService } from 'src/paysca/paysca.service';
 
 @Injectable()
 export class WeekendyService {
@@ -19,6 +21,8 @@ export class WeekendyService {
     @InjectModel(Weekendy.name) private readonly weekendyModel: Model<WeekendyDocument>,
     @InjectModel(WeekendyDocteur.name) private readonly weekendyDocteurModel: Model<WeekendyDocteurDocument>,
     private readonly produitService: ProduitService,
+    private readonly agenceservice: AgenceService,
+    private readonly payscaservice: PayscaService,
     private stockagenceService: StockagenceService,
     private affectationservice: AffectationService,
     private salaireService: SalaireService
@@ -55,6 +59,28 @@ export class WeekendyService {
       };
 
       this.salaireService.create(createSalaireDto);
+
+      const paysinfobyagence = await this.agenceservice.findbureau(createWeekendyDto.bureauId);
+
+      const infoCapays = {
+        countryId: paysinfobyagence.countryId,
+        mois: createWeekendyDto.mois,
+        caTotal: createWeekendyDto.caTotal
+      };
+
+      const getPaysCaMois = await this.payscaservice.findOnePaysCamoisExist(infoCapays.countryId, infoCapays.mois);
+
+      if(getPaysCaMois !=null){
+        const upadateinfopaysCaMois = {
+          countryId: paysinfobyagence.countryId,
+        mois: createWeekendyDto.mois,
+        caTotal: createWeekendyDto.caTotal + getPaysCaMois.caTotal
+        };
+        await this.payscaservice.update(getPaysCaMois._id.toString('hex'), upadateinfopaysCaMois);
+      }else{
+
+        await this.payscaservice.create(infoCapays)
+      }
     }
     // console.log(weekendy);
     return weekendy;
@@ -101,6 +127,32 @@ export class WeekendyService {
     };
     // console.log('doctorWeekendy',doctorWeekendy);
     const weekendy = await  this.weekendyDocteurModel.create(doctorWeekendy);
+    if(weekendy){
+      const paysinfobyagence = await this.agenceservice.findbureau(createDocteurWeekendyDto.bureauId);
+
+      const infoCapays = {
+        countryId: paysinfobyagence.countryId,
+        mois: createDocteurWeekendyDto.mois,
+        caTotal: createDocteurWeekendyDto.caTotal
+      };
+
+      const getPaysCaMois = await this.payscaservice.findOnePaysCamoisExist(infoCapays.countryId, infoCapays.mois);
+
+      if(getPaysCaMois !=null){
+        const upadateinfopaysCaMois = {
+          countryId: paysinfobyagence.countryId,
+          mois: createDocteurWeekendyDto.mois,
+          caTotal: createDocteurWeekendyDto.caTotal + getPaysCaMois.caTotal
+        };
+        await this.payscaservice.update(getPaysCaMois._id.toString('hex'), upadateinfopaysCaMois);
+      }else{
+
+        await this.payscaservice.create(infoCapays)
+      }
+        
+
+
+    }
     console.log(weekendy);
     return weekendy;
   }

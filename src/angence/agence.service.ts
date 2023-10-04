@@ -61,10 +61,14 @@ export class AgenceService {
                                          .populate('zoneId')
                                          .populate('sectionId')
                                          .exec();
-
     if (!agence) {
       throw new NotFoundException('agence non trouvée');
     }
+    return agence;
+  }
+
+  async findbureau(bureauId: string) {
+    const agence = await this.agenceModel.findById(bureauId).exec();
     return agence;
   }
 

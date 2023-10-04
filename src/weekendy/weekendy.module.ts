@@ -10,6 +10,7 @@ import { StockagenceModule } from 'src/stockagence/stockagence.module';
 import { SalaireModule } from 'src/salaire/salaire.module';
 import { AffectationModule } from 'src/affectation/affectation.module';
 import { WeekendyDocteur, WeekendyDocteurSchema } from './schemas/weekendydocteur.schema';
+import { PayscaModule } from 'src/paysca/paysca.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { WeekendyDocteur, WeekendyDocteurSchema } from './schemas/weekendydocteu
     AffectationModule,
     HttpModule,
     SalaireModule,
+    PayscaModule,
     MongooseModule.forFeature(
       [
         { 

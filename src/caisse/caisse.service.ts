@@ -11,7 +11,6 @@ export class CaisseService {
   ){}
   
   async create(createCaisseDto: any) {
-    console.log('ici dto',createCaisseDto);
     return await this.caisseModel.create(createCaisseDto);
   }
 

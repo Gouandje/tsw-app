@@ -35,6 +35,7 @@ import { SuperviseurzoneModule } from './superviseurzone/superviseurzone.module'
 import { ChefsectionModule } from './chefsection/chefsection.module';
 import { CaisseModule } from './caisse/caisse.module';
 import { EntrepotModule } from './entrepot/entrepot.module';
+import { PayscaModule } from './paysca/paysca.module';
 
 @Module({
   imports: [
@@ -58,7 +59,7 @@ import { EntrepotModule } from './entrepot/entrepot.module';
     SalaireModule, 
     AgenceModule, 
     PaysModule, 
-    AuthModule, ExpensesModule, StockModule, AssignmentModule, TauxModule, AffectationModule, CotisationModule, SalaireManagerModule, StockagenceModule, MouvementstockModule, ZoneModule, SectionModule, EmployerModule, CongeModule, StockPaysModule, MvtStockModule, RoleModule, TauxzoneModule, SuperviseurzoneModule, ChefsectionModule, CaisseModule, EntrepotModule
+    AuthModule, ExpensesModule, StockModule, AssignmentModule, TauxModule, AffectationModule, CotisationModule, SalaireManagerModule, StockagenceModule, MouvementstockModule, ZoneModule, SectionModule, EmployerModule, CongeModule, StockPaysModule, MvtStockModule, RoleModule, TauxzoneModule, SuperviseurzoneModule, ChefsectionModule, CaisseModule, EntrepotModule, PayscaModule
   ],
   controllers: [AppController],
   providers: [AppService],
