@@ -24,6 +24,11 @@ export class SalaireManagerController {
     return this.salaireManagerService.findAllCotisationManager(managerId);
   }
 
+  @Get('allCotisationTotaleManager/:managerId')
+  findAllcotisatinTotale(@Param('managerId') managerId: string) {
+    return this.salaireManagerService.findAllCotisationTotaleManager(managerId);
+  }
+
   @Get('allSalaireManagermois/:mois')
   findAllMois(@Param('mois') mois: string) {
     return this.salaireManagerService.findAllmois(mois);

@@ -27,7 +27,7 @@ export class StockagenceService {
   }
 
   async findAll(id: string) {
-    const stockagence = await this.stockagenceModel.find({agenceId:id}).populate('productId').exec();
+    const stockagence = await this.stockagenceModel.find({agenceId:id}).populate('productId').populate('agenceId').exec();
     return stockagence;
   }
 

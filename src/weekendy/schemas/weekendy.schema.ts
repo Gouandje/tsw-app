@@ -2,6 +2,8 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import { HydratedDocument, Schema as MongooseSchema } from "mongoose";
 import { Agence } from "src/angence/schemas/agence.schema";
+import { Annee } from "src/moisannee/schemas/annee.schema";
+import { Mois } from "src/moisannee/schemas/mois.schema";
 import { Products } from "src/produit/schemas/products.shema";
 
 
@@ -18,20 +20,13 @@ export class Weekendy {
     bureauId: string;
 
     @ApiProperty()
-    @Prop({ required: true, type: String })
+    @Prop({type: MongooseSchema.Types.ObjectId, required: true, ref: Mois.name })
     mois: string;
 
     @ApiProperty()
-    @Prop({ required: true, type: String })
-    periode_debut: string;
+    @Prop({type: MongooseSchema.Types.ObjectId, required: true, ref: Annee.name })
+    annee: string;
 
-    @ApiProperty()
-    @Prop({ required: true, type: String })
-    periode_fin: string;
-
-    // @ApiProperty()
-    // @Prop({ required: false })
-    // managers: Types.Array<Manager>;
 
     @ApiProperty()
     @Prop({ 

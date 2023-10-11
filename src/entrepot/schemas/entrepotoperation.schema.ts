@@ -14,14 +14,14 @@ export class EntrepotOperation {
         example: '5efvbe54edfgjkhklh45',
         description: 'The product id',
     })
-    countryId: MongooseSchema.Types.ObjectId;
+    countryId: string;
 
     @Prop({type: MongooseSchema.Types.ObjectId, required: true, ref: Products.name })
     @ApiProperty({
         example: '5efvbe54edfgjkhklh45',
         description: 'The product id',
     })
-    productId: MongooseSchema.Types.ObjectId;
+    productId: string;
 
     @Prop({ required: true })
     @ApiProperty({

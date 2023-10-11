@@ -18,6 +18,8 @@ import { Taux, TauxSchema } from './schemas/taux.schema';
       )
   ],
   controllers: [TauxController],
-  providers: [TauxService]
+  providers: [TauxService],
+  exports: [TauxService]
+
 })
 export class TauxModule {}

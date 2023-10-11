@@ -20,11 +20,12 @@ export class StockService {
 
   }
   async create(createStockDto: CreateStockDto) {
-    try {
+    // try {
       const createdStock = await this.stockModel.create(createStockDto);
       
       if(createdStock){
         const product = await this.stockpaysService.findpaysproduit(createStockDto.productId, createStockDto.paysId);
+        console.log('ici stock du pays', product);
         if(product == null){
           const createstockPaysDto = {
             paysId: createStockDto.paysId,
@@ -39,9 +40,11 @@ export class StockService {
           const updateProduitDto: CreateStockPaysDto = {
             paysId: createStockDto.paysId,
             productId: createStockDto.productId,
-            quantity: product[0].quantity + createStockDto.quantity
+            quantity: product.quantity + createStockDto.quantity
     
           };
+
+          console.log('test ici', updateProduitDto);
           await this.stockpaysService.updatepaysStock(updateProduitDto.paysId, updateProduitDto.productId, updateProduitDto);
     
         }
@@ -53,9 +56,9 @@ export class StockService {
         throw new BadRequestException('Sale not created');
       }
   
-    } catch (error) {
-        throw new InternalServerErrorException(error);
-    }
+    // } catch (error) {
+    //     throw new InternalServerErrorException(error);
+    // }
     return createStockDto;
 
   }

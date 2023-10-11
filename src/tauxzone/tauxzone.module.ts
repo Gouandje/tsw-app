@@ -20,6 +20,7 @@ import { ZoneModule } from 'src/zone/zone.module';
       )
   ],
   controllers: [TauxzoneController],
-  providers: [TauxzoneService]
+  providers: [TauxzoneService],
+  exports: [TauxzoneService]
 })
 export class TauxzoneModule {}

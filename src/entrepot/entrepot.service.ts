@@ -20,7 +20,7 @@ export class EntrepotService {
     @InjectModel(Entrepot.name) private readonly entrepotModel: Model<EntrepotDocument>,
     @InjectModel(EntrepotOperation.name) private readonly entrepotoperationModel: Model<EntrepotOperationDocument>,
     @InjectModel(SortieProduitEntrepot.name) private readonly sortieproduitentrepotModel: Model<SortieProduitEntrepotDocument>,
-    @InjectModel(EntrepotOperation.name) private readonly entrepotproduitstockModel: Model<EntrepotProduitStockDocument>,
+    @InjectModel(EntrepotProduitStock.name) private readonly entrepotproduitstockModel: Model<EntrepotProduitStockDocument>,
     private readonly stockpaysService: StockPaysService,
     private readonly stockService: StockService,
     private readonly paysService: PaysService){
@@ -38,66 +38,81 @@ export class EntrepotService {
         typeoperation:"entrestock",
       };
       const operationtreeentrepot = await this.entrepotoperationModel.create(operationentrepot);
-      console.log('operationtreeentrepot',operationtreeentrepot);
-      const stockproductcurrententrepot = await this.entrepotproduitstockModel.findOne({productId: createEntrepotDto.productId}).exec();
+      if(operationtreeentrepot){
+          const stockproductcurrententrepot = await this.entrepotproduitstockModel.findOne({productId: createEntrepotDto.productId}).exec();
+        if(stockproductcurrententrepot == null){
+          const stockentrepot = {
+            productId: createEntrepotDto.productId,
+            quantity: createEntrepotDto.quantity
+          };
+          this.entrepotproduitstockModel.create(stockentrepot);
+        }else{
+          const currentquantity = stockproductcurrententrepot.quantity
+          const finalquantity = createEntrepotDto.quantity + currentquantity
+          console.log('finalquantity',finalquantity)
+          const stockentrepot = {
+            productId: createEntrepotDto.productId,
+            quantity: finalquantity
+          }
+          const id = stockproductcurrententrepot._id
+          const essai= this.entrepotproduitstockModel.findByIdAndUpdate({_id: id}, stockentrepot, {new: true}).exec();
+        }
 
-      if(stockproductcurrententrepot == null){
-        const stockentrepot = {
-          productId: createEntrepotDto.productId,
-          quantity: createEntrepotDto.quantity
-        }
-        this.entrepotproduitstockModel.create(stockentrepot);
-      }else{
-        const currentquantity = stockproductcurrententrepot.quantity
-        const finalquantity = createEntrepotDto.quantity + currentquantity
-        console.log('finalquantity',finalquantity)
-        const stockentrepot = {
-          productId: createEntrepotDto.productId,
-          quantity: finalquantity
-        }
-        const id = stockproductcurrententrepot._id
-        const essai= this.entrepotproduitstockModel.findByIdAndUpdate({_id: id}, stockentrepot, {new: true}).exec();
-      }
-      
+      }   
 
     }
   }
 
   async createSortieEntrepot(createSortieStockEntrepotDto:CreateSortieStockEntrepot){
-    const stockproductcurrententrepot = await this.entrepotproduitstockModel.findOne(
+
+    const produitasortie = await this.entrepotModel.findOne(
       {productId: createSortieStockEntrepotDto.productId,
-      quantity: createSortieStockEntrepotDto.quantity,
       fabDate: createSortieStockEntrepotDto.fabDate,
       expirDate: createSortieStockEntrepotDto.expirDate
       }).exec();
-      if(stockproductcurrententrepot==null){
-        throw new NotFoundException(`The product was not found.`);
-      }else{
-        const sortiestockentrepot = await this.sortieproduitentrepotModel.create(createSortieStockEntrepotDto);
-        const consignedentrepot = this.stockService.create(createSortieStockEntrepotDto);
-        if(consignedentrepot){
-          const operationentrepot = {
-            countryId: createSortieStockEntrepotDto.paysId,
-            productId:createSortieStockEntrepotDto.productId,
-            quantity:createSortieStockEntrepotDto.quantity,
-            operationDate:createSortieStockEntrepotDto.enterDate,
-            typeoperation:"sortietock",
-          };
-          const operationtreeentrepot = await this.entrepotoperationModel.create(operationentrepot);
-          console.log('operationtreeentrepot',operationtreeentrepot);
       
-          const currentquantity = stockproductcurrententrepot.quantity;
-          const finalquantity = createSortieStockEntrepotDto.quantity - currentquantity;
-          const stockentrepot = {
-            productId: createSortieStockEntrepotDto.productId,
-            quantity: finalquantity
-          };
-          const id = stockproductcurrententrepot._id;
-          this.entrepotproduitstockModel.findByIdAndUpdate({_id: id}, stockentrepot, {new: true}).exec();
+    if(produitasortie==null){
+      throw new NotFoundException(`Il semble que les informations liées à ce produit que vous souhaitez faire sortir ne sont pas correctes. Veuillez verifier la date de fabrication ou la date de péremption..!`);
+    }else{
+      const stockproductcurrententrepot = await this.entrepotproduitstockModel.findOne({productId: createSortieStockEntrepotDto.productId}).exec();
+      if(stockproductcurrententrepot !=null && stockproductcurrententrepot.quantity > createSortieStockEntrepotDto.quantity){
+
+        const sortiestockentrepot = await this.sortieproduitentrepotModel.create(createSortieStockEntrepotDto);
+        if(sortiestockentrepot){
+          const consignedentrepot = this.stockService.create(createSortieStockEntrepotDto);
+
+          if(consignedentrepot){
+            const operationentrepot = {
+              countryId: createSortieStockEntrepotDto.paysId,
+              productId:createSortieStockEntrepotDto.productId,
+              quantity:createSortieStockEntrepotDto.quantity,
+              operationDate:createSortieStockEntrepotDto.enterDate,
+              typeoperation:"sortietock",
+            };
+            const operationtreeentrepot = await this.entrepotoperationModel.create(operationentrepot);
+        
+            const currentquantity = stockproductcurrententrepot.quantity;
+            const finalquantity = currentquantity - createSortieStockEntrepotDto.quantity;
+            const stockentrepot = {
+              productId: createSortieStockEntrepotDto.productId,
+              quantity: finalquantity
+            };
+            const id = stockproductcurrententrepot._id;
+            this.entrepotproduitstockModel.findByIdAndUpdate({_id: id}, stockentrepot, {new: true}).exec();
+          }
+
         }
+
+      }else{
+        throw new NotFoundException('La quantité du produit que vous souhaitez faire sortir est supérieure à la quantité disponible en stock qui est de: '+ `${stockproductcurrententrepot.quantity}`+'!');
+
       }
-      return "created";
+
+      
+      
     }
+    return {message: "created"};
+  }
 
   async findAll() {
     const entrepot = await this.entrepotModel.find().populate('productId').exec();
@@ -110,7 +125,7 @@ export class EntrepotService {
   }
 
   async findAllProductSortieStockEntrepot() {
-    const sortieentrepot = await this.sortieproduitentrepotModel.find().populate('productId').populate('countryId').exec();
+    const sortieentrepot = await this.sortieproduitentrepotModel.find().populate('productId').populate('paysId').exec();
     
     return sortieentrepot;
   }

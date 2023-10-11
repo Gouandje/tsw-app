@@ -11,39 +11,29 @@ export class CreateWeekendyDto {
     @IsString()
     @IsNotEmpty()
     @ApiProperty({ description: 'Weekendy month' })
-    readonly mois: string;
+    mois: string;
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty({ description: 'weekendy debut' })
-    readonly periode_debut: string;
+    annee: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty({ description: 'Weekendy fin' })
-    readonly periode_fin: string;
-
-    // @IsArray()
-    // @ApiProperty({ description: 'Manager' })
-    // readonly managers: Manager[];
-  
     @IsArray()
     @IsNotEmpty()
-    // @Type(() => Products)
     @ApiProperty({ description: 'Products purchased' })
-    readonly items: [{quantity: number, productId: string, name: string}];
+    items: [{quantity: number, productId: string, name: string}];
   
     @IsNumber()
     @IsPositive()
     @IsNotEmpty()
     @ApiProperty({ description: 'chiffre d\'affaire totat' })
-    readonly caTotal: number;
+    caTotal: number;
 
     @IsNumber()
     @IsPositive()
     @IsNotEmpty()
     @ApiProperty({ description: 'montant deposé à la banque' })
-    readonly TotaltoBank: number;
+    TotaltoBank: number;
 
     @IsNumber()
     @IsPositive()

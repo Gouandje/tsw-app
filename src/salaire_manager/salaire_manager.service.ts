@@ -6,10 +6,16 @@ import { SalaireDocument } from 'src/salaire/schemas/salaire.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UpdateDetteDto } from './dto/update-dette.dto';
+import { Cotisation, CotisationDocument } from './schemas/cotisation.schema';
+import { AgenceService } from 'src/angence/agence.service';
 
 @Injectable()
 export class SalaireManagerService {
-  constructor(@InjectModel(SalaireManager.name) private readonly salaireModel: Model<SalaireManagerDocument>){}
+  constructor(@InjectModel(SalaireManager.name) private readonly salaireModel: Model<SalaireManagerDocument>,
+  @InjectModel(Cotisation.name) private readonly cotisationModel: Model<CotisationDocument>,
+  private readonly agenceservice: AgenceService,
+
+  ){}
 
   async create(createSalaireManagerDto: CreateSalaireManagerDto) {
 
@@ -18,6 +24,25 @@ export class SalaireManagerService {
       throw new ConflictException(`cette existe déjà dans la base de données`);
     }
     const createdSalairemanager = await this.salaireModel.create(createSalaireManagerDto);
+    if(createSalaireManagerDto){
+      const getcotisation = await this.cotisationModel.findOne({managerId: createSalaireManagerDto.managerId}).exec();
+      if(getcotisation == null){
+        const createcotisation = {
+          managerId: createSalaireManagerDto.managerId,
+          cotisation_totale: createSalaireManagerDto.garantie_manager,
+          statut: "impayé"
+        };
+        await this.cotisationModel.create(createcotisation);
+      }else{
+        const updatecotisation = {
+          managerId: createSalaireManagerDto.managerId,
+          cotisation_totale: getcotisation.cotisation_totale +  createSalaireManagerDto.garantie_manager,
+          statut: "impayé"
+        };
+        await this.cotisationModel.findByIdAndUpdate({_id: getcotisation._id},updatecotisation, { new: true,} ).lean();
+      }
+      
+    }
     return createdSalairemanager;
   }
 
@@ -30,6 +55,15 @@ export class SalaireManagerService {
     return salairesManager;
   }
 
+  async findAllCotisationTotaleManager(managerId: string){
+
+    const cotisationtotale = await this.cotisationModel
+                    .findOne({managerId: managerId})
+                    .exec();
+    return cotisationtotale;
+
+  }
+
   async findAllCotisationManager(managerId: string) {
     const cotisation: any[] = [];
     const salairesManager = await this.salaireModel
@@ -37,10 +71,19 @@ export class SalaireManagerService {
                     .populate('managerId')
                     .populate('salaireId')
                     .exec();
+    // console.log(salairesManager);                
     for(let i=0; i<salairesManager.length; i++){
+      // console.log(salairesManager[i].salaireId["bureauId"].toString('hex'));
+      const bureau = await this.agenceservice.findbureau(salairesManager[i].salaireId["bureauId"].toString('hex'));
+      // console.log('bureau', bureau);
       const obj={
+        bureau: bureau.bureau_name,
+        managerId:salairesManager[i].managerId,
+        chiffreaffaire: salairesManager[i].salaireId["chiffreDaf"],
+        salaire: salairesManager[i].salaire_manager,
         cotisation: salairesManager[i].garantie_manager,
-        mois: salairesManager[i].mois
+        mois: salairesManager[i].mois,
+        
       };
       cotisation.push(obj);
 

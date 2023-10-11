@@ -38,7 +38,7 @@ import { SortieProduitEntrepot, SortieProduitEntrepotSchema } from './schemas/so
           schema: SortieProduitEntrepotSchema
         }
       ]
-      )
+    )
   ],
   controllers: [EntrepotController],
   providers: [EntrepotService]

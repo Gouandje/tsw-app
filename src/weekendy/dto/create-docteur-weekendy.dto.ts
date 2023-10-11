@@ -11,22 +11,13 @@ export class CreateDocteurWeekendyDto {
     @IsString()
     @IsNotEmpty()
     @ApiProperty({ description: 'Weekendy month' })
-    readonly mois: string;
+    mois: string;
 
     @IsString()
     @IsNotEmpty()
-    @ApiProperty({ description: 'weekendy debut' })
-    readonly periode_debut: string;
+    @ApiProperty({ description: 'Weekendy month' })
+    annee: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty({ description: 'Weekendy fin' })
-    readonly periode_fin: string;
-
-    // @IsArray()
-    // @ApiProperty({ description: 'Manager' })
-    // readonly managers: Manager[];
-  
     @IsArray()
     @IsNotEmpty()
     // @Type(() => Products)
@@ -37,7 +28,7 @@ export class CreateDocteurWeekendyDto {
     @IsPositive()
     @IsNotEmpty()
     @ApiProperty({ description: 'chiffre d\'affaire totat' })
-    readonly caTotal: number;
+    caTotal: number;
 
     @IsString()
     createdAt: string;

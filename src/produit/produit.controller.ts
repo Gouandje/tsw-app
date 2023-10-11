@@ -23,12 +23,12 @@ export class ProduitController {
   }
 
   @Get('singleproduit/:id')
-  findOne(@Param('id') id: MongooseSchema.Types.ObjectId) {
+  findOne(@Param('id') id: string) {
     return this.produitService.findOne(id);
   }
 
   @Patch('updateproduit/:id')
-  update(@Param('id') id: MongooseSchema.Types.ObjectId, @Body() updateProduitDto: UpdateProduitDto) {
+  update(@Param('id') id: string, @Body() updateProduitDto: UpdateProduitDto) {
     return this.produitService.update(id, updateProduitDto);
   }
 

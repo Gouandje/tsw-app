@@ -35,9 +35,15 @@ export class WeekendyController {
 
   @Get('allWeekendy/:bureauId')
   findAll(@Param('bureauId') bureauId: MongooseSchema.Types.ObjectId) {
-    
     return this.weekendyService.findAll(bureauId);
   }
+
+  @Get('allventepays')
+  allGetAllProduitVendyPays() {
+    return this.weekendyService.allGetAllProduitVendyPays();
+  }
+
+
 
   @Get('singleWeekendy/:id')
   findOne(@Param('id') id: string) {

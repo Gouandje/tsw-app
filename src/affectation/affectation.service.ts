@@ -18,15 +18,16 @@ export class AffectationService {
   ) {}
 
   async create(createAffectationDto: CreateAffectationDto) {
-    const alreadyExists = await this.affectationModel.exists({ managerId: createAffectationDto.managerId }).lean();
-    if(alreadyExists){
-      throw new ConflictException(`Il y a déjà des managers cet bureau existe déjà dans la base de données`);
-    }
+    
     for(let i = 0; i<createAffectationDto.managerId.length; i++){
+      const alreadyExists = await this.affectationModel.exists({ managerId: createAffectationDto.managerId[i]._id }).lean();
+      if(alreadyExists){
+        throw new ConflictException(`Il y a déjà des managers cet bureau existe déjà dans la base de données`);
+      }
       const affectationvalue = {
         bureauId: createAffectationDto.bureauId,
         managerId: createAffectationDto.managerId[i]._id
-      } 
+      };
       const createdAffection = await this.affectationModel.create(affectationvalue);
       if(createdAffection){
         const updateStatusDto: UpdateStatusDto = {
@@ -37,7 +38,7 @@ export class AffectationService {
       
     }
 
-    return 'Enregistrement effectué avec succès';
+    return {message: 'Enregistrement effectué avec succès'};
   }
 
   async findAll() {
@@ -71,7 +72,7 @@ export class AffectationService {
     const manager = await this.affectationModel.find({bureauId: bureauId}).populate('managerId');
 
     for(let i=0; i<manager.length; i++){
-      if(manager[i].managerId['grade'] == "Manager"){
+      if(manager[i].managerId['grade'] == "Manager" || manager[i].managerId['grade'] == "Manager Superviseur de Zone" || manager[i].managerId['grade'] == "Manager Chef de section" ){
         managers.push(manager[i]);
       }
     }
@@ -86,7 +87,15 @@ export class AffectationService {
   }
 
   async remove(id: string) {
-    await this.affectationModel.deleteOne({ _id: id });
-    return {};
+    const affectation = await this.affectationModel.findById(id);
+    const updateStatusDto: UpdateStatusDto = {
+      status_mgr: "non affecté"
+    }
+    const annuleAffectation = await this.managerService.updateStatut(affectation.managerId, updateStatusDto);
+    if(annuleAffectation){
+      await this.affectationModel.findByIdAndRemove({ _id: id });
+      return {message: 'affectation annulée avec succès!'};
+    }
+    
   }
 }

@@ -32,7 +32,7 @@ export class ProduitService {
     return products;
   }
 
-  async findOne(productId: MongooseSchema.Types.ObjectId): Promise<Products>  {
+  async findOne(productId: string){
     const product = await this.productModel.findById(productId);
 
     if (!product) {
@@ -41,7 +41,7 @@ export class ProduitService {
     return product;
   }
 
-  async update(productId: MongooseSchema.Types.ObjectId, updateProduitDto: UpdateProduitDto) {
+  async update(productId: string, updateProduitDto: UpdateProduitDto) {
     const product = await this.findOne(productId);
 
     const updatedProduct = this.productModel.findOneAndUpdate({_id: productId }, updateProduitDto, {

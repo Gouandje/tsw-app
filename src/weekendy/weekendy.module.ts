@@ -11,16 +11,22 @@ import { SalaireModule } from 'src/salaire/salaire.module';
 import { AffectationModule } from 'src/affectation/affectation.module';
 import { WeekendyDocteur, WeekendyDocteurSchema } from './schemas/weekendydocteur.schema';
 import { PayscaModule } from 'src/paysca/paysca.module';
+import { Produitvendubureau, ProduitvendubureauSchema } from './schemas/produitvendubureau.schema';
+import { Produitvendupays, ProduitvendupaysSchema } from './schemas/produitsvendupays.schema';
+import { TauxModule } from 'src/taux/taux.module';
+import { MoisanneeModule } from 'src/moisannee/moisannee.module';
 
 @Module({
   imports: [
     ProduitModule,
     AgenceModule, 
     StockagenceModule,
+    MoisanneeModule,
     AffectationModule,
     HttpModule,
     SalaireModule,
     PayscaModule,
+    TauxModule,
     MongooseModule.forFeature(
       [
         { 
@@ -30,6 +36,14 @@ import { PayscaModule } from 'src/paysca/paysca.module';
         { 
           name: WeekendyDocteur.name, 
           schema: WeekendyDocteurSchema 
+        },
+        { 
+          name: Produitvendubureau.name, 
+          schema: ProduitvendubureauSchema 
+        },
+        { 
+          name: Produitvendupays.name, 
+          schema: ProduitvendupaysSchema 
         }
       ]
       )

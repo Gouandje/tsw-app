@@ -28,6 +28,11 @@ export class ManagerController {
     return this.managerService.findAllManager();
   }
 
+  @Get('allmanagersnonaffectes')
+  findAllManagers() {
+    return this.managerService.findAllManagersNonAffectes();
+  }
+
 
   @Get('singlemanager/:id')
   findOne(@Param('id') id: string) {
@@ -48,4 +53,5 @@ export class ManagerController {
   remove(@Param('id') id: string) {
     return this.managerService.remove(id);
   }
+  
 }

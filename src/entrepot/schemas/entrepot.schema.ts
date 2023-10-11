@@ -14,7 +14,7 @@ export class Entrepot {
         example: '5efvbe54edfgjkhklh45',
         description: 'The product id',
     })
-    productId: MongooseSchema.Types.ObjectId;
+    productId: string;
 
     @Prop({ required: true })
     @ApiProperty({

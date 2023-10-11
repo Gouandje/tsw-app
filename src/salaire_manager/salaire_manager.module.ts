@@ -6,10 +6,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { HttpModule } from '@nestjs/axios';
 import { ManagerModule } from 'src/manager/manager.module';
 import { SalaireModule } from 'src/salaire/salaire.module';
+import { Cotisation, CotisationSchema } from './schemas/cotisation.schema';
+import { AgenceModule } from 'src/angence/agence.module';
 
 @Module({
   imports: [   
     SalaireModule,
+    AgenceModule,
     ManagerModule, 
     HttpModule,
     MongooseModule.forFeature(
@@ -17,6 +20,10 @@ import { SalaireModule } from 'src/salaire/salaire.module';
         { 
           name: SalaireManager.name, 
           schema: SalaireManagerSchema 
+        },
+        { 
+          name: Cotisation.name, 
+          schema: CotisationSchema 
         }
       ]
       )

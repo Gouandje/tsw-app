@@ -14,14 +14,14 @@ export class SortieProduitEntrepot {
         example: '5efvbe54edfgbknjlh45',
         description: 'The country id ',
     })
-    paysId: MongooseSchema.Types.ObjectId;
+    paysId: string;
 
     @Prop({type: MongooseSchema.Types.ObjectId, required: false, ref: Products.name })
     @ApiProperty({
         example: '5efvbe54edfgjkhklh45',
         description: 'The product id',
     })
-    productId: MongooseSchema.Types.ObjectId;
+    productId: string;
 
     @Prop({ required: true })
     @ApiProperty({

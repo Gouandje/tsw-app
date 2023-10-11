@@ -32,6 +32,12 @@ export class ManagerService {
     return manager;
   }
 
+  async findAllManagersNonAffectes() {
+    const status_mgr = "non affecté";
+    const manager = await this.managerModel.find({status_mgr: status_mgr}).exec();
+    return manager;
+  }
+
   async findAllSupervisor() {
     const grade: string = "Manager Superviseur de Zone";
     const manager = await this.managerModel.find({grade: grade}).exec();
