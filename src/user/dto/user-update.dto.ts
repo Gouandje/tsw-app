@@ -27,9 +27,9 @@ export class UserUpdate {
     readonly telephone: string;
 
     @ApiProperty({ example: '5efvbe54edfgbknjlh45', description: 'The country id '})
-    @IsString()
+    @IsArray()
     @IsNotEmpty()
-    countryId: string;
+    countryId: [{_id: string, country_name: string}];
 
     @ApiProperty({
     example: 'gestionnaire',

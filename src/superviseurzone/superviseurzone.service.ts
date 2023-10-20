@@ -67,4 +67,10 @@ export class SuperviseurzoneService {
     await this.superviseurzoneModel.deleteOne({ _id: id });
     return {};
   }
+
+  async removefordelete(id: string) {
+    await this.superviseurzoneModel.findOneAndRemove({ zoneId: id });
+    return {};
+  }
+  
 }

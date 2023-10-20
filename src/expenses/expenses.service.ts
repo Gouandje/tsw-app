@@ -7,11 +7,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Caisse, CaisseDocument } from 'src/caisse/schemas/caisse.schema';
 import { CaisseService } from 'src/caisse/caisse.service';
 import { CreateCaisseDto } from 'src/caisse/dto/create-caisse.dto';
+import { Category, CategoryDocument } from './schemas/category.schema';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class ExpensesService {
   constructor(
     @InjectModel(Expense.name) private readonly expenseModel: Model<ExpenseDocument>,
+    @InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>,
     private readonly caisseService: CaisseService
    ){}
 
@@ -81,5 +85,42 @@ export class ExpensesService {
     });
 
     return `supprimé avec succès`;
+  }
+
+
+  async createCategory(createCategoryDto: CreateCategoryDto) {
+    const createdCategory = await this.categoryModel.create(createCategoryDto);
+    return createdCategory;
+  }
+
+  async findAllCategory() {
+    const category = await this.categoryModel.find().exec();
+    return category;
+  }
+
+  async findOneCategory(categoryId: string){
+    const category = await this.categoryModel.findById(categoryId);
+
+    if (!category) {
+      throw new NotFoundException('ligne non trouvé');
+    }
+    return category;
+  }
+
+  async removeCategory(id: string) {
+    await this.categoryModel.findByIdAndRemove(id).catch((err) => {
+      throw new BadRequestException(`une erreur s'est produite lors de la suppression`);
+    });
+
+    return `supprimé avec succès`;
+  }
+
+  async updateCategory(categoryId: string, updateCategoryDto: UpdateCategoryDto) {
+    const updatedCategory = this.categoryModel.findOneAndUpdate({_id: categoryId }, updateCategoryDto, {
+      new: true,
+    }).exec();
+
+
+    return updatedCategory;
   }
 }

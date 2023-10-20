@@ -44,7 +44,7 @@ export class AngenceController {
   }
 
   @Delete('deleteagence/:id')
-  remove(@Param('id') id: MongooseSchema.Types.ObjectId) {
+  remove(@Param('id') id: string) {
     return this.agenceService.remove(id);
   }
 }

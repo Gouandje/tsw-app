@@ -143,7 +143,13 @@ export class EntrepotService {
     return `This action updates a #${id} entrepot`;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} entrepot`;
+  async remove(id: string) {
+    const entrepot = await this.entrepotoperationModel.find({countryId: id}).exec();
+
+    if(entrepot !=null){
+      for(let i=0; i<entrepot.length; i++){
+        await this.entrepotoperationModel.findByIdAndRemove(entrepot[i]._id);
+      }
+    }
   }
 }

@@ -26,10 +26,4 @@ export class PaysController {
   update(@Param('id') id: string, @Body() updatePaysDto: UpdatePaysDto) {
     return this.paysService.update(id, updatePaysDto);
   }
-
-  @Delete('deletepays/:id')
-  remove(@Param('id') id: string) {
-    // console.log(id);
-    return this.paysService.remove(id);
-  }
 }

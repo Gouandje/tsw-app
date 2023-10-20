@@ -48,7 +48,7 @@ export class PaysService {
   }
 
   async remove(paysId: string) {
-    // console.log(paysId);
+    console.log('test id pays', paysId);
     await this.paysModel.findByIdAndRemove(paysId).catch((err) => {
       throw new BadRequestException(err);
     });

@@ -29,7 +29,7 @@ export class StockController {
   }
 
   @Delete('deletestock/:id')
-  remove(@Param('id') id: MongooseSchema.Types.ObjectId) {
+  remove(@Param('id') id: string) {
     return this.stockService.remove(id);
   }
 

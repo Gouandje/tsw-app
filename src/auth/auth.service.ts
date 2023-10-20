@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { JwtPayload } from './dto/JWTPAYloadInterface';
+import { User } from 'src/user/schemas/user.schema';
 
 
 @Injectable()
@@ -27,5 +28,18 @@ export class AuthService {
 
   async validateUser(payload: JwtPayload): Promise<any> {
     return this.userService.findByEmail(payload.email);
+  }
+
+  public async validatedUser(user: any): Promise<User> {
+    try {
+      const existedUser: User = await this.userService.findByCredentials(user.email, user.mot_de_passe);
+      return existedUser || null;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  verifyJwt(jwt: string): Promise<any> {
+    return this.jwtService.verifyAsync(jwt);
   }
 }

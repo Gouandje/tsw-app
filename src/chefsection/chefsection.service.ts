@@ -67,4 +67,9 @@ export class ChefsectionService {
     await this.chefsectionModel.deleteOne({ _id: id });
     return {};
   }
+
+  async removechefsectionfordelete(id: string) {
+    await this.chefsectionModel.findOneAndRemove({ sectionId: id });
+    return {};
+  }
 }

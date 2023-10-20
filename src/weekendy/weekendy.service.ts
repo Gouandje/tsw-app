@@ -284,4 +284,17 @@ export class WeekendyService {
 
     return `Weekendy supprimé avec succès`;
   }
+
+  async findOneByBureauForDelete(id: string) {
+
+    const weekedy = await this.weekendyModel.find({bureauId: id}).exec();           
+    if (weekedy !=null) {
+     for(let i=0; i<weekedy.length; i++){
+      await this.weekendyModel.findByIdAndRemove({_id: weekedy[i]._id});
+     }
+    }
+    return 'weekedy';
+  }
+
+  
 }

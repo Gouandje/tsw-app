@@ -67,6 +67,11 @@ export class AffectationService {
     return manager;
   }
 
+  async findByreau(bureauId: string) {
+    const manager = await this.affectationModel.find({bureauId: bureauId}).exec();
+    return manager;
+  }
+
   async findManager_bureau(bureauId: string) {
     const managers = []
     const manager = await this.affectationModel.find({bureauId: bureauId}).populate('managerId');
@@ -97,5 +102,9 @@ export class AffectationService {
       return {message: 'affectation annulée avec succès!'};
     }
     
+  }
+
+  async findaffecteForDelele(id: string){
+    return await this.affectationModel.findOneAndRemove({bureauId: id});
   }
 }

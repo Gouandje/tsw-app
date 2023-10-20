@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, MaxFileSizeValidator, BadRequestException, Res, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch,Req, UseGuards, HttpCode, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, FileTypeValidator, MaxFileSizeValidator, BadRequestException, Res, HttpStatus, HttpException } from '@nestjs/common';
 import {Request} from 'express';
 
 import { UserService } from './user.service';
@@ -14,6 +14,7 @@ import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Observable, of } from 'rxjs';
 import { UserUpdate } from './dto/user-update.dto';
+import { CommonResult } from 'src/auth/dto/common-result';
 
 export const storage = {
   storage: diskStorage({
@@ -54,6 +55,7 @@ export class UserController {
 
   }
 
+  // @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOperation({ description: 'Get all users' })
   @ApiOkResponse({
@@ -87,9 +89,18 @@ export class UserController {
   async update(
     @Param() { adminId }: FindOneParams,
     @Body() updateUserDto: UserUpdate,
-  ): Promise<User> {
+  ){
     return this.userService.updateById(adminId, updateUserDto);
   }
+
+  @Patch('updatepassword/:adminId')
+  updatepassword(
+    @Param('adminId') adminId: string,
+    @Body() updateUserDto: any,
+  ){
+    return this.userService.updatePassword(adminId, updateUserDto);
+  }
+
 
   @Delete('delete/:adminId')
   @ApiOperation({

@@ -31,6 +31,10 @@ export class SalaireService {
     return salaires;
   }
 
+  async remove(id: string){
+    
+  }
+
 
   async findOne(id: string) {
     const salaire = await this.salaireModel.findById(id)
@@ -49,7 +53,13 @@ export class SalaireService {
       .lean();
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} salaire`;
+  async removefindSalaireFordelete(id: string) {
+    const salaire = await this.salaireModel.find({bureauId: id}).exec();
+    if(salaire !=null){
+      for(let i=0; i<salaire.length; i++){
+       await this.salaireModel.findByIdAndRemove(id);
+      }
+    }
+    return;
   }
 }

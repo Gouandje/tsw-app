@@ -7,7 +7,7 @@ import { UpdateCaisseDto } from './dto/update-caisse.dto';
 export class CaisseController {
   constructor(private readonly caisseService: CaisseService) {}
 
-  @Get()
+  @Get('solde')
   findAll() {
     return this.caisseService.findAll();
   }

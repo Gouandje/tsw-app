@@ -44,9 +44,14 @@ export class SectionService {
     return section;
   }
 
+  async findOnebycountry(id: string){
+    const section = await this.sectionModel.findOne({countryId: id}).exec();
+    return section;
+  }
+
   async findOne(id: string) {
     const section = (await this.sectionModel.findById(id))
-                                            .populated('contryId')
+                                            .populated('countryId')
                                             .populated('zoneId')
                                             .exec();
 
@@ -71,4 +76,24 @@ export class SectionService {
 
     return `section deleted`;
   }
+
+  async findsectionpaysDelete(id: string){
+   const section = await this.sectionModel.find({countryId: id}).exec();
+   if(section !=null){
+    for(let i=0; i<section.length; i++){
+      await this.sectionModel.findByIdAndRemove(section[i]._id);
+    }
+   }
+   return;
+  }
+
+  async findsectionzoneDelete(id: string){
+    const section = await this.sectionModel.find({zoneId: id}).exec();
+    if(section !=null){
+     for(let i=0; i<section.length; i++){
+       await this.sectionModel.findByIdAndRemove(section[i]._id);
+     }
+    }
+    return;
+   }
 }

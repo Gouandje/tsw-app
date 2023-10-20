@@ -68,7 +68,7 @@ export class StockagenceService {
     console.log(stockagence);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} stockagence`;
+  async remove(id: string) {
+    await this.stockagenceModel.findOneAndRemove({agenceId: id});
   }
 }

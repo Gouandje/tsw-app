@@ -3,6 +3,7 @@ import { ExpensesService } from './expenses.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { Schema as MongooseSchema} from 'mongoose';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Controller('expenses')
 export class ExpensesController {
@@ -31,5 +32,31 @@ export class ExpensesController {
   @Delete('deleteexpense/:id')
   remove(@Param('id') id: MongooseSchema.Types.ObjectId) {
     return this.expensesService.remove(id);
+  }
+
+  @Post('newcategory')
+  createCategory(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.expensesService.createCategory(createCategoryDto);
+  }
+
+  
+  @Get('allcategory')
+  findAllCategory() {
+    return this.expensesService.findAllCategory();
+  }
+
+  @Get('singlecategory/:id')
+  findOneCategory(@Param('id') id: string) {
+    return this.expensesService.findOneCategory(id);
+  }
+
+  @Patch('updatecategory/:id')
+  updateCategory(@Param('id') id: string, @Body() updateCategoryDto: CreateCategoryDto) {
+    return this.expensesService.updateCategory(id, updateCategoryDto);
+  }
+
+  @Delete('deletecategory/:id')
+  removeCategory(@Param('id') id: string) {
+    return this.expensesService.removeCategory(id);
   }
 }

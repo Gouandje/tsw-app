@@ -95,11 +95,16 @@ export class StockService {
     .lean();
   }
 
-  async remove(id) {
+  async remove(id: string) {
     await this.stockModel.findByIdAndRemove(id).catch((err) => {
       throw new BadRequestException(`une erreur c'est produite lors de la suppression`);
     });
 
+    return `stock supprimé avec succès`;
+  }
+
+  async removebyCountry(id: string) {
+    await this.stockModel.findByIdAndRemove({paysId: id}).exec()
     return `stock supprimé avec succès`;
   }
 }

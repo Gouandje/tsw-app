@@ -41,6 +41,7 @@ import { SortieProduitEntrepot, SortieProduitEntrepotSchema } from './schemas/so
     )
   ],
   controllers: [EntrepotController],
-  providers: [EntrepotService]
+  providers: [EntrepotService],
+  exports: [EntrepotService]
 })
 export class EntrepotModule {}

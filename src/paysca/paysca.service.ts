@@ -112,7 +112,13 @@ export class PayscaService {
     return update
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} paysca`;
+  async remove(id: string) {
+    const paysca = await this.payscaModel.find({countryId: id}).exec();
+
+    if(paysca != null){
+      for(let i=0; i<paysca.length; i++){
+        await this.payscaModel.findByIdAndRemove(paysca[i]._id);
+      }
+    }
   }
 }

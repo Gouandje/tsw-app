@@ -7,6 +7,13 @@ export class CreateExpenseDto {
         description: 'The date of the expense',
      })
     @IsString()
+    categoryId: string;
+
+    @ApiProperty({
+        example: '27-05-2023',
+        description: 'The date of the expense',
+     })
+    @IsString()
     @IsNotEmpty()
     date: string;
 

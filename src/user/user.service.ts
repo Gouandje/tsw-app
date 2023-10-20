@@ -45,7 +45,7 @@ export class UserService {
      return users;
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string){
     const user = await this.userModel.findOne({ email }).lean();
     
     // console.log('ici admin apr email',user);
@@ -64,6 +64,10 @@ export class UserService {
     return userObject;
   }
 
+  public getOne(id: string): Promise<User> {
+    return this.userModel.findOne({ _id: id });
+  }
+
   // async findByEmail(email: string, mot_de_passe:string): Promise<User> {
   //   const user = await this.userModel.findOne({ email, mot_de_passe }).le;
   //   console.log('ici',user);
@@ -80,7 +84,8 @@ export class UserService {
     });
   }
 
-  async  updateById(adminId: string, userUpdates: UserUpdate): Promise<User> {
+  async  updateById(adminId: string, userUpdates: UserUpdate){
+    console.log('userUpdates',userUpdates);
     const user = await this.userModel.findById(adminId).exec();
     if(userUpdates.mot_de_passe == null){
       userUpdates.mot_de_passe = user.mot_de_passe;
@@ -105,6 +110,16 @@ export class UserService {
 
   async remove(adminId: string): Promise<DeleteUserResponse> {
     return this.userModel.findByIdAndDelete(adminId).lean();
+  }
+
+  async updatePassword(adminId, param: any){
+    const user= await this.userModel.findOne({adminId: adminId}).exec();
+    if(user !=null){
+      const result = await this.userModel.findByIdAndUpdate({_id: adminId}, {mot_de_passe: param.mot_de_passe}, {new: true}).lean();
+      console.log(param.mot_de_passe);
+      return result;
+    }
+    return;
   }
 
   async uploadAvatar(

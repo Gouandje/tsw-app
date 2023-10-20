@@ -7,10 +7,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { HttpModule } from '@nestjs/axios';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from 'src/user/schemas/user.schema';
+import { JwtStrategy } from './JwtStrategy';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({ defaultStrategy: 'local' }),
+    // PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
         secretOrPrivateKey: 'secretKey',
         signOptions: {
@@ -19,6 +21,7 @@ import { User, UserSchema } from 'src/user/schemas/user.schema';
     }),
     UserModule,
     HttpModule,
+    // ChatModule,
     MongooseModule.forFeature(
       [
         { 
@@ -29,6 +32,7 @@ import { User, UserSchema } from 'src/user/schemas/user.schema';
       )
   ],
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [AuthService, JwtStrategy],
+  exports: [AuthService]
 })
 export class AuthModule {}

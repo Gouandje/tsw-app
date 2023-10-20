@@ -37,12 +37,17 @@ export class AgenceService {
     return agences;
   }
 
-  async findAllagenceByCountry(id: string): Promise<Agence[]> {
+  async findAllagenceByCountry(id: string){
     const agences = await this.agenceModel.find({countryId: id})
                               .populate('countryId')
                               .populate('zoneId')
                               .populate('sectionId')
                               .exec();
+    return agences;
+  }
+
+  async findAllagenceCountry(id: string){
+    const agences = await this.agenceModel.find({countryId: id}).exec();
     return agences;
   }
 
@@ -52,6 +57,16 @@ export class AgenceService {
                               .populate('zoneId')
                               .populate('sectionId')
                               .exec();
+    return agences;
+  }
+
+  async findAllagenceZone(id: string) {
+    const agences = await this.agenceModel.find({zoneId: id}).exec();
+    return agences;
+  }
+
+  async findAllagenceSection(id: string) {
+    const agences = await this.agenceModel.find({sectionId: id}).exec();
     return agences;
   }
 
@@ -100,12 +115,12 @@ export class AgenceService {
     return agency;
   }
 
-  async remove(bureauId: MongooseSchema.Types.ObjectId) {
-    // console.log(paysId);
+  async remove(bureauId: string) {
     await this.agenceModel.findByIdAndRemove(bureauId).catch((err) => {
-      throw new BadRequestException(err);
+      throw new BadRequestException(`une erreur c'est produite lors de la suppression`);
     });
-    return `agency deleted`;
+
+    return `bureau supprimé avec succès`;
 
   }
 }

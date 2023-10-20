@@ -26,9 +26,19 @@ export class User {
         example: 'a2d840f79a0b12f4c6a4b80a',
         description: 'The ID of the angency',
       })
-    @Prop({type: MongooseSchema.Types.ObjectId, required: true, ref: Pays.name,
-    })
-    countryId: string;
+    @Prop({required: true})
+    countryId:[
+        {
+        _id: {
+            type: MongooseSchema.Types.ObjectId,
+            ref: Pays,
+            }, 
+            country_name: {
+            type: string,
+            ref: Pays,
+          },
+        }
+    ];
 
     @Prop()
     @ApiProperty({

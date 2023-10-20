@@ -37,8 +37,6 @@ export class MouvementstockService {
         const bureau = await this.agenceService.findSingleAgengence(createMouvementstockDto.bureauId);
         const product = await this.agenceStockService.findagenceproduit(createMouvementstockDto.bureauId, createMouvementstockDto.items[i].productId);
 
-        console.log('product', product);
-
         if(product == null){
           const createStockagenceDto: CreateStockagenceDto = {
             agenceId: createMouvementstockDto.bureauId,
@@ -92,6 +90,10 @@ export class MouvementstockService {
     return;
   }
 
+  async findOne(id: string){
+
+  }
+
   async findAll() {
     const mvtstock = await this.mvtstockModel.find().populate('bureauId').populate('productId').exec();
     if(mvtstock){
@@ -100,8 +102,19 @@ export class MouvementstockService {
     return mvtstock;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mouvementstock`;
+  async findOnebyBureau(id: string) {
+    const bureaumvt = await this.mvtstockModel.find({bureauId: id}).exec();
+    return bureaumvt;
+  }
+
+  async findOnebyBureauForDelete(id: string) {
+    const bureaumvt = await this.mvtstockModel.find({bureauId: id}).exec();
+    if(bureaumvt !=null){
+      for(let i=0; i<bureaumvt.length; i++){
+        this.mvtstockModel.findByIdAndRemove(bureaumvt[i]._id);
+      }
+    }
+    return "deleted";
   }
 
   update(id: number, updateMouvementstockDto: UpdateMouvementstockDto) {

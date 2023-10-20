@@ -1,11 +1,19 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty } from "@nestjs/swagger";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument,Schema as MongooseSchema } from "mongoose";
+import { Category } from "./category.schema";
 
 export type ExpenseDocument = HydratedDocument<Expense>;
 
 @Schema()
 export class Expense {
+    @Prop({type: MongooseSchema.Types.ObjectId, required: false, ref: Category.name })
+    @ApiProperty({
+        example: '5efvbe54edfgjkhklh45',
+        description: 'The product id',
+    })
+    categoryId: string;
+
     @Prop({ required: true })
     @ApiProperty({
         example: '27-05-2023',

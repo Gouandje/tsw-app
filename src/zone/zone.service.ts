@@ -37,10 +37,10 @@ export class ZoneService {
   }
 
   async findOne(id: string) {
-    const zone = await this.zoneModel.findById(id).populate('countryId').exec();
+    const zone = await this.zoneModel.findOne({countryId:id}).populate('countryId').exec();
 
     if (!zone) {
-      throw new NotFoundException('Pays non trouvé');
+      throw new NotFoundException('zone non trouvée');
     }
     return zone;
   }
@@ -70,4 +70,14 @@ export class ZoneService {
     return `Zone deleted`;
 
   }
+
+  async findzonepaysDelete(id: string){
+    const zone = await this.zoneModel.find({countryId: id}).exec();
+    if(zone !=null){
+     for(let i=0; i<zone.length; i++){
+       await this.zoneModel.findByIdAndRemove(zone[i]._id);
+     }
+    }
+    return;
+   }
 }

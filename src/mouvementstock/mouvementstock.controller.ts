@@ -19,7 +19,7 @@ export class MouvementstockController {
 
   @Get('singlemvtstock/:id')
   findOne(@Param('id') id: string) {
-    return this.mouvementstockService.findOne(+id);
+    return this.mouvementstockService.findOne(id);
   }
 
   @Patch('updatemvtstock/:id')

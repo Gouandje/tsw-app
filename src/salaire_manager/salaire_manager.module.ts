@@ -29,6 +29,7 @@ import { AgenceModule } from 'src/angence/agence.module';
       )
   ],
   controllers: [SalaireManagerController],
-  providers: [SalaireManagerService]
+  providers: [SalaireManagerService],
+  exports: [SalaireManagerService]
 })
 export class SalaireManagerModule {}

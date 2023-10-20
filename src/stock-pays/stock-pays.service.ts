@@ -71,6 +71,6 @@ export class StockPaysService {
   }
 
   async remove(id: string) {
-    return `This action removes a #${id} stockPay`;
+    return await this.stockpaysModel.findByIdAndRemove(id);
   }
 }
