@@ -377,7 +377,7 @@ export class WeekendyService {
     return `Weekendy supprimé avec succès`;
   }
 
-  async findOneByBureauForDelete(id: string) {
+  async findOneByweekendyForDelete(id: string) {
 
     const weekedy = await this.weekendyModel.find({bureauId: id}).exec();           
     if (weekedy !=null) {

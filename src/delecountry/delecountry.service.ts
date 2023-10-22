@@ -53,7 +53,7 @@ export class DelecountryService {
         await this.sectionService.remove(bureau[i].sectionId);
         await this.zoneService.remove(bureau[i].zoneId);
         await this.mvtService.findOnebyBureauForDelete(bureau[i]._id.toString('hex'));
-        await this.weekendyService.findOneByBureauForDelete(bureau[i]._id.toString('hex'));
+        await this.weekendyService.findOneByweekendyForDelete(bureau[i]._id.toString('hex'));
 
         await this.salaireService.removefindSalaireFordelete(bureau[i]._id.toString('hex'));
 
@@ -93,7 +93,7 @@ export class DelecountryService {
         await this.agenceService.remove(bureau[i]._id.toString('hex'));
         await this.sectionService.remove(bureau[i].sectionId);
         await this.mvtService.findOnebyBureauForDelete(bureau[i]._id.toString('hex'));
-        await this.weekendyService.findOneByBureauForDelete(bureau[i]._id.toString('hex'));
+        await this.weekendyService.findOneByweekendyForDelete(bureau[i]._id.toString('hex'));
         await this.superviseurzone.removefordelete(bureau[i].zoneId);
         await this.chefsectionservice.removechefsectionfordelete(bureau[i].sectionId);
         await this.salaireService.removefindSalaireFordelete(bureau[i]._id.toString('hex'));
@@ -122,7 +122,7 @@ export class DelecountryService {
         await this.agenceService.remove(bureau[i]._id.toString('hex'));
         await this.sectionService.remove(bureau[i].sectionId);
         await this.mvtService.findOnebyBureauForDelete(bureau[i]._id.toString('hex'));
-        await this.weekendyService.findOneByBureauForDelete(bureau[i]._id.toString('hex'));
+        await this.weekendyService.findOneByweekendyForDelete(bureau[i]._id.toString('hex'));
         await this.salaireService.removefindSalaireFordelete(bureau[i]._id.toString('hex'));
 
         await this.stockBureService.remove(bureau[i]._id.toString('hex'));
@@ -146,7 +146,7 @@ export class DelecountryService {
       for(let i=0; i<affectation.length; i++){
         await this.affectationService.remove(affectation[i]._id.toString('hex'));
         await this.mvtService.findOnebyBureauForDelete(affectation[i].bureauId);
-        await this.weekendyService.findOneByBureauForDelete(affectation[i].bureauId);
+        await this.weekendyService.findOneByweekendyForDelete(affectation[i].bureauId);
         await this.salaireService.removefindSalaireFordelete(affectation[i].bureauId);
 
         await this.stockBureService.remove(affectation[i].bureauId);
