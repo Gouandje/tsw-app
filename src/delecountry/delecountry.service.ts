@@ -143,7 +143,6 @@ export class DelecountryService {
   async removebureau(id: string) {
     const affectation = await this.affectationService.findByreau(id);
     if(affectation.length !=0){
-      console.log('id',id)
       for(let i=0; i<affectation.length; i++){
         await this.affectationService.remove(affectation[i]._id.toString('hex'));
         await this.mvtService.findOnebyBureauForDelete(affectation[i].bureauId);
