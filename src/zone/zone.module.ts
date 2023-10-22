@@ -5,6 +5,8 @@ import { Zone, ZoneSchema } from './schemas/zone.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { HttpModule } from '@nestjs/axios';
 import { PaysModule } from 'src/pays/pays.module';
+import { Zoneca, ZonecaSchema } from './schemas/zoneca.schema';
+import { Primesz, PrimeszSchema } from './schemas/primesz.schema';
 
 @Module({
   imports: [
@@ -15,6 +17,14 @@ import { PaysModule } from 'src/pays/pays.module';
         { 
           name: Zone.name, 
           schema: ZoneSchema 
+        },
+        { 
+          name: Zoneca.name, 
+          schema: ZonecaSchema 
+        },
+        { 
+          name: Primesz.name, 
+          schema: PrimeszSchema 
         }
       ]
       )

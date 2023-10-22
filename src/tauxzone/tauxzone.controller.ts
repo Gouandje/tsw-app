@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TauxzoneService } from './tauxzone.service';
 import { CreateTauxzoneDto } from './dto/create-tauxzone.dto';
 import { UpdateTauxzoneDto } from './dto/update-tauxzone.dto';
+import { CreateTauxsectionDto } from './dto/create-tauxsection.dto';
+import { UpdateTauxsectionDto } from './dto/update-tauxsection.dto';
 
 @Controller('tauxzone')
 export class TauxzoneController {
@@ -35,5 +37,37 @@ export class TauxzoneController {
   @Delete('deleteTauxZone/:id')
   remove(@Param('id') id: string) {
     return this.tauxzoneService.remove(id);
+  }
+
+  // tauxsection
+
+  @Post('createTauxSection')
+  createSection(@Body() createTauxsectionDto: CreateTauxsectionDto) {
+    return this.tauxzoneService.createsection(createTauxsectionDto);
+  }
+
+  @Get('allTauxSection')
+  findAllSection() {
+    return this.tauxzoneService.findAllSection();
+  }
+
+  @Get('singleTauxSection/:id')
+  findOneSection(@Param('id') id: string) {
+    return this.tauxzoneService.findOneSection(id);
+  }
+
+  @Get('singleTauxBySection/:id')
+  findBySection(@Param('id') id: string) {
+    return this.tauxzoneService.findBysection(id);
+  }
+
+  @Patch('updateTauxSection/:id')
+  updatesection(@Param('id') id: string, @Body() updateTauxsectionDto: UpdateTauxsectionDto) {
+    return this.tauxzoneService.updatesection(id, updateTauxsectionDto);
+  }
+
+  @Delete('deleteTauxSection/:id')
+  removesection(@Param('id') id: string) {
+    return this.tauxzoneService.removesection(id);
   }
 }

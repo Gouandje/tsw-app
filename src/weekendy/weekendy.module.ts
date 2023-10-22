@@ -15,6 +15,9 @@ import { Produitvendubureau, ProduitvendubureauSchema } from './schemas/produitv
 import { Produitvendupays, ProduitvendupaysSchema } from './schemas/produitsvendupays.schema';
 import { TauxModule } from 'src/taux/taux.module';
 import { MoisanneeModule } from 'src/moisannee/moisannee.module';
+import { TauxzoneModule } from 'src/tauxzone/tauxzone.module';
+import { ZoneModule } from 'src/zone/zone.module';
+import { SectionModule } from 'src/section/section.module';
 
 @Module({
   imports: [
@@ -27,6 +30,9 @@ import { MoisanneeModule } from 'src/moisannee/moisannee.module';
     SalaireModule,
     PayscaModule,
     TauxModule,
+    TauxzoneModule,
+    ZoneModule,
+    SectionModule,
     MongooseModule.forFeature(
       [
         { 

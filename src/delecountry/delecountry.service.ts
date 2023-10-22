@@ -142,22 +142,24 @@ export class DelecountryService {
 
   async removebureau(id: string) {
     const affectation = await this.affectationService.findByreau(id);
-    if(affectation !=null){
+    if(affectation.length !=0){
+      console.log('id',id)
       for(let i=0; i<affectation.length; i++){
         await this.affectationService.remove(affectation[i]._id.toString('hex'));
-        await this.mvtService.findOnebyBureauForDelete(affectation[i]._id.toString('hex'));
-        await this.weekendyService.findOneByBureauForDelete(affectation[i]._id.toString('hex'));
-        await this.salaireService.removefindSalaireFordelete(affectation[i]._id.toString('hex'));
+        await this.mvtService.findOnebyBureauForDelete(affectation[i].bureauId);
+        await this.weekendyService.findOneByBureauForDelete(affectation[i].bureauId);
+        await this.salaireService.removefindSalaireFordelete(affectation[i].bureauId);
 
-        await this.stockBureService.remove(affectation[i]._id.toString('hex'));
+        await this.stockBureService.remove(affectation[i].bureauId);
 
-        await this.patientService.findandDelete(affectation[i]._id.toString('hex'));
+        await this.patientService.findandDelete(affectation[i].bureauId);
+        await this.agenceService.remove(id)
       }
     }else{
-      await this.sectionService.remove(id)
-      await this.chefsectionservice.removechefsectionfordelete(id);      
+      console.log('ici vrai action id',id)
+      await this.agenceService.remove(id);
     }
-    return "deleted";
+    return {message: "deleted"};
 
   }
 }

@@ -51,7 +51,7 @@ export class StockPaysService {
   }
 
   async findAllproductbycountry(paysId: string){
-    const product = await this.stockpaysModel.find({paysId:paysId}).populate('productId').exec();
+    const product = await this.stockpaysModel.find({paysId:paysId}).populate('productId').populate('paysId').exec();
     return product;
 
   }

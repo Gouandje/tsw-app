@@ -17,6 +17,9 @@ import { PayscaService } from 'src/paysca/paysca.service';
 import { Produitvendupays, ProduitvendupaysDocument } from './schemas/produitsvendupays.schema';
 import { ProduitvendubureauDocument } from './schemas/produitvendubureau.schema';
 import { TauxService } from 'src/taux/taux.service';
+import { ZoneService } from 'src/zone/zone.service';
+import { SectionService } from 'src/section/section.service';
+import { TauxzoneService } from 'src/tauxzone/tauxzone.service';
 
 @Injectable()
 export class WeekendyService {
@@ -27,6 +30,9 @@ export class WeekendyService {
     @InjectModel(WeekendyDocteur.name) private readonly weekendyDocteurModel: Model<WeekendyDocteurDocument>,
     private produitService: ProduitService,
     private agenceservice: AgenceService,
+    private zoneservice: ZoneService,
+    private sectionservice: SectionService,
+    private tauxzoneservice: TauxzoneService,
     private tauxservice: TauxService,
     private payscaservice: PayscaService,
     private stockagenceService: StockagenceService,
@@ -65,13 +71,99 @@ export class WeekendyService {
     const weekendy = await  this.weekendyModel.create(createdDataDto);
     if(weekendy){
       const bureau = await this.agenceservice.findbureau(createWeekendyDto.bureauId);
+      const zoneca = await this.zoneservice.findzonecabyZone(bureau.zoneId, createWeekendyDto.annee);
+      // zone prime and ca
+      if(zoneca !=null){
+        const updateDatazoneca ={
+          zoneId: bureau.zoneId,
+          cazone:(createWeekendyDto.caTotal + zoneca['cazone']),
+          annee: createWeekendyDto.annee
+        }; 
+        await this.zoneservice.updatezoneca(zoneca._id.toString('hex'),updateDatazoneca);
+
+      }else{
+        const createDatazoneca ={
+          zoneId: bureau.zoneId,
+          cazone:createWeekendyDto.caTotal,
+          annee: createWeekendyDto.annee
+        }; 
+        await this.zoneservice.createzoneca(createDatazoneca);
+      }
+      const tauxzone = await this.tauxzoneservice.findByzone(bureau.zoneId);
+      const primesz = await this.zoneservice.findprimesz(bureau.zoneId, createWeekendyDto.mois, createWeekendyDto.annee);
+
+      if(primesz !=null){
+        const updateDataprimesz ={
+          zoneId: bureau.zoneId,
+          cazone:(createWeekendyDto.caTotal + primesz.cazone),
+          annee: createWeekendyDto.annee,
+          primesz: (createWeekendyDto.caTotal*tauxzone.taux_zone + primesz.cazone),
+        }; 
+        await this.zoneservice.updateprimesz(primesz._id.toString('hex'),updateDataprimesz);
+
+      }else{
+        const createDataprime ={
+          zoneId: bureau.zoneId,
+          cazone:createWeekendyDto.caTotal,
+          mois:createWeekendyDto.mois,
+          annee: createWeekendyDto.annee,
+          primesz: createWeekendyDto.caTotal*tauxzone.taux_zone,
+        }; 
+        await this.zoneservice.createprimesz(createDataprime);
+      }
+      // end
+
+      // section prime and ca
+      const sectionca = await this.sectionservice.findSectioncaforAgence(bureau.sectionId, createWeekendyDto.annee);
+
+      if(sectionca !=null){
+        const updateDatasectionca ={
+          sectionId: bureau.sectionId,
+          casection:(createWeekendyDto.caTotal + sectionca.casection),
+          annee: createWeekendyDto.annee
+        }; 
+        await this.sectionservice.updatesectionca(sectionca._id.toString('hex'),updateDatasectionca);
+
+      }else{
+        const createDatasectionca ={
+          sectionId: bureau.sectionId,
+          casection:createWeekendyDto.caTotal,
+          annee: createWeekendyDto.annee
+        }; 
+        await this.sectionservice.createcasection(createDatasectionca);
+      }
+      const tauxsection = await this.tauxzoneservice.findBysection(bureau.zoneId);
+      const primechefsection = await this.sectionservice.findprimechefsection(bureau.sectionId, createWeekendyDto.mois, createWeekendyDto.annee);
+
+      if(primechefsection !=null){
+        const updateDataprimechefsection ={
+          sectionId: bureau.sectionId,
+          casection:(createWeekendyDto.caTotal + primechefsection.casection),
+          annee: createWeekendyDto.annee,
+          Chefsectionprime: (createWeekendyDto.caTotal*tauxsection.taux_section + primechefsection.casection),
+        }; 
+        await this.sectionservice.updateprimechefsection(primechefsection._id.toString('hex'),updateDataprimechefsection);
+
+      }else{
+        const createDataprimechefsection ={
+          sectionId: bureau.sectionId,
+          casection:createWeekendyDto.caTotal,
+          annee: createWeekendyDto.annee,
+          Chefsectionprime: (createWeekendyDto.caTotal*tauxsection.taux_section),
+        }; 
+        await this.sectionservice.createprimechefsection(createDataprimechefsection);
+      }
+
+      // end
+     
+
       for(let i=0; i < createWeekendyDto.items.length; i++){
         const product = await this.stockagenceService.findagenceproduit(createWeekendyDto.bureauId, createWeekendyDto.items[i].productId);
          const productPrice = await this.produitService.findOne(createWeekendyDto.items[i].productId);
-        const produitvendupays = await this.produitvendupaysModel.findOne({paysId: bureau['countryId'], productId: createWeekendyDto.items[i].productId,  annee: createWeekendyDto.annee}).exec();
+        const produitvendupays = await this.produitvendupaysModel.findOne({paysId: bureau.countryId, productId: createWeekendyDto.items[i].productId,  annee: createWeekendyDto.annee}).exec();
         if(produitvendupays == null){
           const createdproduitvenduDto = {
-            paysId: bureau['countryId'],
+            paysId: bureau.countryId,
             productId: createWeekendyDto.items[i].productId,
             quantity: createWeekendyDto.items[i].quantity,
             annee: createWeekendyDto.annee,
@@ -82,7 +174,7 @@ export class WeekendyService {
 
         }else{
           const updatedproduitvenduDto = {
-            paysId: bureau['countryId'],
+            paysId: bureau.countryId,
             productId: createWeekendyDto.items[i].productId,
             quantity: produitvendupays['quantity'] + createWeekendyDto.items[i].quantity,
             annee: createWeekendyDto.annee,
@@ -170,10 +262,10 @@ export class WeekendyService {
       for(let i=0; i < createDocteurWeekendyDto.items.length; i++){
         const product = await this.stockagenceService.findagenceproduit(createDocteurWeekendyDto.bureauId, createDocteurWeekendyDto.items[i].productId);
          const productPrice = await this.produitService.findOne(createDocteurWeekendyDto.items[i].productId);
-        const produitvendupays = await this.produitvendupaysModel.findOne({paysId: bureau['countryId'], productId: createDocteurWeekendyDto.items[i].productId,  annee: createDocteurWeekendyDto.annee}).exec();
+        const produitvendupays = await this.produitvendupaysModel.findOne({paysId: bureau.countryId, productId: createDocteurWeekendyDto.items[i].productId,  annee: createDocteurWeekendyDto.annee}).exec();
         if(produitvendupays == null){
           const createdproduitvenduDto = {
-            paysId: bureau['countryId'],
+            paysId: bureau.countryId,
             productId: createDocteurWeekendyDto.items[i].productId,
             quantity: createDocteurWeekendyDto.items[i].quantity,
             annee: createDocteurWeekendyDto.annee,
@@ -184,7 +276,7 @@ export class WeekendyService {
 
         }else{
           const updatedproduitvenduDto = {
-            paysId: bureau['countryId'],
+            paysId: bureau.countryId,
             productId: createDocteurWeekendyDto.items[i].productId,
             quantity: produitvendupays['quantity'] + createDocteurWeekendyDto.items[i].quantity,
             annee: createDocteurWeekendyDto.annee,

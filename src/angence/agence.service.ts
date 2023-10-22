@@ -83,7 +83,7 @@ export class AgenceService {
   }
 
   async findbureau(bureauId: string) {
-    const agence = await this.agenceModel.findById(bureauId).exec();
+    const agence = await this.agenceModel.findOne({_id:bureauId}).exec();
     return agence;
   }
 
@@ -116,11 +116,12 @@ export class AgenceService {
   }
 
   async remove(bureauId: string) {
+    console.log('bureauId', bureauId);
     await this.agenceModel.findByIdAndRemove(bureauId).catch((err) => {
       throw new BadRequestException(`une erreur c'est produite lors de la suppression`);
     });
 
-    return `bureau supprimé avec succès`;
+    return {message: 'bureau supprimé avec succès'};
 
   }
 }

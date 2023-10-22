@@ -4,6 +4,9 @@ import { UpdateZoneDto } from './dto/update-zone.dto';
 import { Zone, ZoneDocument } from './schemas/zone.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { Primesz, PrimeszDocument } from './schemas/primesz.schema';
+import { Zoneca } from './schemas/zoneca.schema';
+import { MoisanneeController } from 'src/moisannee/moisannee.controller';
 
 @Injectable()
 export class ZoneService {
@@ -11,6 +14,8 @@ export class ZoneService {
 
   constructor(
     @InjectModel(Zone.name) private readonly zoneModel: Model<ZoneDocument>,
+    @InjectModel(Zoneca.name) private readonly zonecaModel: Model<ZoneDocument>,
+    @InjectModel(Primesz.name) private readonly primeszModel: Model<PrimeszDocument>,
   ) {}
 
   async create(createZoneDto: CreateZoneDto) {
@@ -35,6 +40,45 @@ export class ZoneService {
 
     return zone;
   }
+
+  async findzonecabyZone(zoneId:string, annee:string) {
+    const zoneca = await this.zonecaModel.findOne({zoneId: zoneId, annee: annee}).exec();
+
+    return zoneca;
+  }
+
+  async findprimesz(zoneId:string, mois:string, annee:string) {
+    const zoneca = await this.primeszModel.findOne({zoneId: zoneId, mois:mois, annee: annee}).exec();
+
+    return zoneca;
+  }
+
+  async createprimesz(data:any){
+    await this.zonecaModel.create(data);
+  }
+
+ 
+
+  async createzoneca(data:any){
+    await this.zonecaModel.create(data);
+  }
+
+  async updatezoneca(id: string, updateZoneDto: any) {
+    return this.zonecaModel
+      .findOneAndUpdate({ id }, updateZoneDto, {
+        new: true,
+      })
+      .lean();
+  }
+
+  async updateprimesz(id: string, updateZoneDto: any) {
+    return this.zonecaModel
+      .findOneAndUpdate({ id }, updateZoneDto, {
+        new: true,
+      })
+      .lean();
+  }
+
 
   async findOne(id: string) {
     const zone = await this.zoneModel.findOne({countryId:id}).populate('countryId').exec();
@@ -80,4 +124,6 @@ export class ZoneService {
     }
     return;
    }
+
+
 }
